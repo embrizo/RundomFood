@@ -1,0 +1,32 @@
+# Node.js / JavaScript
+node_modules/
+.env
+.DS_Store
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS generated files
+Thumbs.db
+Desktop.ini
+
+# Application logs and temp files
+server.err.log
+server.out.log
+
+# Build output
+dist/
+build/

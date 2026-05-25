@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Random Food</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <aside class="sidebar" aria-label="Primary navigation">
+        <div class="brand">
+          <div class="brand-mark">RF</div>
+          <div>
+            <h1>สุดเดช Random Food</h1>
+            <p>Spin. Pick. Eat.</p>
+          </div>
+        </div>
+
+        <nav class="nav-tabs" aria-label="App pages">
+          <button class="nav-tab active" type="button" data-page="spin">Spin</button>
+          <button class="nav-tab" type="button" data-page="list">My Food List</button>
+          <button class="nav-tab" type="button" data-page="favorites">Favorites</button>
+          <button class="nav-tab" type="button" data-page="settings">Settings</button>
+        </nav>
+
+        <section class="profile-card" id="profileCard">
+          <div class="avatar" id="profileAvatar">G</div>
+          <div class="profile-copy">
+            <strong id="profileName">Guest Foodie</strong>
+            <span id="profileEmail">Sign in to sync later</span>
+          </div>
+        </section>
+
+        <button class="secondary-button full-width" id="authButton" type="button">Sign in with Google</button>
+      </aside>
+
+      <section class="content">
+        <section class="page active" id="page-spin" aria-labelledby="spinHeading">
+          <div class="page-header">
+            <div>
+              <p class="eyebrow">Random picker</p>
+              <h2 id="spinHeading">What should we eat?</h2>
+            </div>
+            <div class="mode-toggle" role="group" aria-label="Picker mode">
+              <button class="mode-button active" type="button" data-mode="meal">Meal at home</button>
+              <button class="mode-button" type="button" data-mode="restaurant">Restaurant</button>
+            </div>
+          </div>
+
+          <div class="spin-layout">
+            <section class="wheel-panel" aria-label="Spin wheel">
+              <div class="wheel-wrap">
+                <div class="wheel-pointer" aria-hidden="true"></div>
+                <canvas id="wheelCanvas" width="560" height="560" aria-label="Food spin wheel"></canvas>
+                <button class="spin-button" id="spinButton" type="button">Spin</button>
+              </div>
+            </section>
+
+            <section class="result-panel" aria-live="polite">
+              <div class="result-topline">
+                <span id="poolCount">0 options</span>
+                <button class="icon-button" id="favoriteButton" type="button" title="Save favorite" aria-label="Save favorite">&hearts;</button>
+              </div>
+              <h3 id="resultName">Ready when you are</h3>
+              <p id="resultDescription">Choose a mode, adjust your filters, then spin the wheel.</p>
+              <div class="tag-row" id="resultTags"></div>
+              <a class="map-link hidden" id="mapLink" href="#" target="_blank" rel="noreferrer">Open map</a>
+            </section>
+          </div>
+
+          <section class="history-section" aria-labelledby="historyHeading">
+            <div class="section-heading">
+              <h3 id="historyHeading">Recent Picks</h3>
+              <button class="text-button" id="clearHistoryButton" type="button">Clear</button>
+            </div>
+            <div class="compact-list" id="historyList"></div>
+          </section>
+        </section>
+
+        <section class="page" id="page-list" aria-labelledby="listHeading">
+          <div class="page-header">
+            <div>
+              <p class="eyebrow">Custom pool</p>
+              <h2 id="listHeading">My Food List</h2>
+            </div>
+          </div>
+
+          <form class="food-form" id="foodForm">
+            <input type="hidden" id="editingId" />
+            <label>
+              <span>Name</span>
+              <input id="foodName" required maxlength="60" placeholder="e.g. Garlic butter noodles" />
+            </label>
+            <label>
+              <span>Category</span>
+              <select id="foodCategory">
+                <option value="meal">Meal at home</option>
+                <option value="restaurant">Restaurant</option>
+              </select>
+            </label>
+            <label class="wide">
+              <span>Notes</span>
+              <input id="foodNotes" maxlength="120" placeholder="Short description or craving note" />
+            </label>
+            <fieldset class="wide diet-fieldset">
+              <legend>Diet tags</legend>
+              <div class="check-grid" id="foodDietTags"></div>
+            </fieldset>
+            <div class="form-actions wide">
+              <button class="primary-button" type="submit">Save item</button>
+              <button class="secondary-button" id="resetFormButton" type="button">Reset</button>
+            </div>
+          </form>
+
+          <div class="card-grid" id="foodList"></div>
+        </section>
+
+        <section class="page" id="page-favorites" aria-labelledby="favoritesHeading">
+          <div class="page-header">
+            <div>
+              <p class="eyebrow">Saved choices</p>
+              <h2 id="favoritesHeading">Favorites</h2>
+            </div>
+          </div>
+          <div class="card-grid" id="favoritesList"></div>
+        </section>
+
+        <section class="page" id="page-settings" aria-labelledby="settingsHeading">
+          <div class="page-header">
+            <div>
+              <p class="eyebrow">Preferences</p>
+              <h2 id="settingsHeading">Settings</h2>
+            </div>
+          </div>
+
+          <section class="settings-panel">
+            <div>
+              <h3>Diet Filters</h3>
+              <p>Only matching meals and restaurants will be included in the wheel.</p>
+            </div>
+            <div class="check-grid" id="settingsDietFilters"></div>
+          </section>
+
+          <section class="settings-panel">
+            <div>
+              <h3>Restaurant Radius</h3>
+              <p>Used by the restaurant picker and ready for Google Places integration.</p>
+            </div>
+            <label class="range-label">
+              <span id="radiusLabel">5 km</span>
+              <input id="radiusRange" type="range" min="1" max="10" value="5" />
+            </label>
+          </section>
+
+          <section class="settings-panel">
+            <div>
+              <h3>Location</h3>
+              <p id="locationStatus">No location selected.</p>
+            </div>
+            <button class="secondary-button" id="locationButton" type="button">Use my location</button>
+          </section>
+        </section>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
